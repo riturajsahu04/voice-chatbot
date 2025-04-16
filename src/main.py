@@ -2,7 +2,7 @@ from services.speech_to_text import SpeechToTextService
 from services.dialogflow import DialogflowService
 from services.text_to_speech import TextToSpeechService
 from config.settings import Settings
-from utils.helpers import load_env_variables
+from utils.helpers import load_env_variables, record_audio, play_audio
 from google.oauth2.service_account import Credentials
 import os
 
@@ -21,10 +21,10 @@ def main():
 
     # Main loop for user interaction
     print("Voice Chatbot is running. Speak to interact...")
-    switch = True
-    while switch:
-        # Specify the audio file path
-        audio_file_path = os.path.join(os.getcwd(), "voice-chatbot", "audio", "Recording.wav")  # Replace with the path to your audio file
+    while True:
+        # Record audio from the microphone
+        audio_file_path = os.path.join(os.getcwd(), "voice-chatbot", "audio", "Recording.wav")
+        record_audio(audio_file_path, duration=5)
 
         # Capture audio and transcribe to text
         transcripts = speech_service.transcribe_audio(audio_file_path)
@@ -50,8 +50,9 @@ def main():
         output_audio_path = os.path.join(os.getcwd(), "voice-chatbot", "audio", "Response.wav")
         with open(output_audio_path, "wb") as audio_file:
             audio_file.write(audio_content)
-        print(f"Bot response audio saved to {output_audio_path}")
-        switch = False
+
+        # Play the audio response
+        play_audio(output_audio_path)
 
 if __name__ == "__main__":
     main()
