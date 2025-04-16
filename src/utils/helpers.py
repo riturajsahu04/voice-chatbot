@@ -1,7 +1,6 @@
 import pyaudio
 import wave
 from dotenv import load_dotenv
-import os
 
 def load_env_variables():
     """Load environment variables from the .env file."""
